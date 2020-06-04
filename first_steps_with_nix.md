@@ -5,13 +5,13 @@ Borrowed from [Cargo documentation](https://doc.rust-lang.org/cargo/getting-star
 To start a new project with Nix, use  `nix new`:
 
 ```console
-$ nix new --template=templates#hello-world hello_world/
+$ nix new --template=templates#hello-world hello/
 ```
 
 or 
 
 ```console
-$ mkdir hello_world/
+$ mkdir hello/
 $ nix init --template=templates#hello-world 
 ```
 
@@ -22,7 +22,7 @@ Nix defaults to `only-flake` template. To use a different template we passed
 Let’s check out what Nix has generated for us:
 
 ```console
-$ cd hello_world
+$ cd hello
 $ tree .
 ├── flake.nix 
 └── src/ 
@@ -35,12 +35,36 @@ $ tree .
  ```nix
  {
    inputs =
-     { nixpkgs = ...
+     { nixpkgs.url = "nixpkgs/nixos-unstable";
      };
-   outpus =
-     { defaultPackage = ...;
-       packages = ...;
-     };
+   outpus = { self, nixpkgs }:
+     let
+       _pkgs = import nixpkgs {};
+       inherit (_pkgs.lib) genAttrs;
+       systems =
+         [ "x86_64-linux"
+           "i686-linux"
+           "x86_64-darwin"
+           "aarch64-linux"
+         ];
+       forAllSystems = f: genAttrs systems (system: f (import <nixpkgs> { inherit system; }));
+       project = pkgs: pkgs.stdenv.mkDerivation
+         { name = "hello-0.1.0";
+           src = self;
+           buildInputs = [ ];
+           buildPhase = ''
+             echo "Building hello.sh ..."
+           '';
+           installPhase = ''
+             mkdir -p $out/bin
+             cp ./src/hello.sh $out/bin
+             chmod +x $out/bin/hello.sh
+           '';
+         };
+     in rec { defaultPackage = packages.hello
+              defaultCommand = "./bin/hello.sh";
+              packages.hello = forAllSystems project
+            };
  }
  ```
  This is called a **manifest**, and it contains all of the metadata that Nix 
@@ -56,13 +80,13 @@ Nix generated a "hello world" project for us. Let’s build it:
 
 ```console
 $ nix build 
-   Building hello_world v0.1.0 (file:///path/to/package/hello_world)
+   Building hello-0.1.0 (file:///path/to/package/hello)
 ```
 
 And then run it:
 
 ```console
-$ ./result/bin/hello-world 
+$ ./result/bin/hello
 Hello, world!
 ```
 
@@ -70,8 +94,8 @@ We can also use `nix run` to compile and then run it, all in one step:
 
 ```console
 $ nix run
-     Fresh hello_world v0.1.0 (file:///path/to/package/hello_world)
-   Running `result/bin/hello_world`
+     Fresh hello-0.1.0 (file:///path/to/package/hello)
+   Running `result/bin/hello`
 Hello, world!
 ```
 
@@ -79,11 +103,12 @@ To enter development environment of you project use `nix develop` command:
 
 ```console
 $ nix develop 
-   Developing hello_world v0.1.0 (file:///path/to/package/hello_world)
-(dev) $ bash src/hello_world.sh 
+   Developing hello-0.1.0 (file:///path/to/package/hello)
+(dev) $ bash src/hello.sh
 Hello, world!
+(dev) $ # Lets edit `src/hello.sh` with sed and allow for argument to be passed
 (dev) $ sed -i -e 's|, world|, ${1:-world}|' src/hello.sh 
-(dev) $ bash src/hello_world.sh Nix 
+(dev) $ bash src/hello.sh Nix
 Hello, Nix! 
 ```
 
@@ -93,13 +118,24 @@ usual development cycle.
 
 ```console
 $ nix develop --run-phase=check 
-     Developing hello_world v0.1.0 (file:///path/to/package/hello_world)
+     Developing hello-0.1.0 (file:///path/to/package/hello)
    Running phase: check
 ... <here is check phase output> ...
 (dev) $ exit
 ```
 
+Above command can be also used to run build phase and thus having incremental
+support for your build.
+
+```console
+$ nix develop --run-phase=build --exit
+     Developing hello-0.1.0 (file:///path/to/package/hello)
+   Running phase: build
+Building hello.sh ...
+$
+```
+
+
 ## Going further 
 
 For more details on using Nix, check out the [Nix Guide](https://nixos.org/learn.html).
-
