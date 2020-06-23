@@ -19,7 +19,7 @@ Nix defaults to `only-flake` template. To use a different template we passed
 `--template=hello-world`. To list all available templates use 
 `nix list-templates` .
 
-Let’s check out what Nix has generated for us:
+Let's check out what Nix has generated for us:
 
 ```console
 $ cd hello
@@ -39,15 +39,14 @@ $ tree .
      };
    outpus = { self, nixpkgs }:
      let
-       _pkgs = import nixpkgs {};
-       inherit (_pkgs.lib) genAttrs;
+       inherit (nixpkgs.lib) genAttrs;
        systems =
          [ "x86_64-linux"
            "i686-linux"
            "x86_64-darwin"
            "aarch64-linux"
          ];
-       forAllSystems = f: genAttrs systems (system: f (import <nixpkgs> { inherit system; }));
+       forAllSystems = f: genAttrs systems (system: f (import nixpkgs { inherit system; }));
        project = pkgs: pkgs.stdenv.mkDerivation
          { name = "hello-0.1.0";
            src = self;
@@ -61,7 +60,7 @@ $ tree .
              chmod +x $out/bin/hello.sh
            '';
          };
-     in rec { defaultPackage = packages.hello
+     in rec { defaultPackage = packages.hello;
               defaultCommand = "./bin/hello.sh";
               packages.hello = forAllSystems project
             };
@@ -70,13 +69,13 @@ $ tree .
  This is called a **manifest**, and it contains all of the metadata that Nix 
  needs to build your project.
 
- Here’s what is in `src/hello.sh`:
+ Here's what is in `src/hello.sh`:
 
  ```bash
  echo "Hello, world!"
  ```
 
-Nix generated a "hello world" project for us. Let’s build it:
+Nix generated a "hello world" project for us. Let's build it:
 
 ```console
 $ nix build 
@@ -106,7 +105,7 @@ $ nix develop
    Developing hello-0.1.0 (file:///path/to/package/hello)
 (dev) $ bash src/hello.sh
 Hello, world!
-(dev) $ # Lets edit `src/hello.sh` with sed and allow for argument to be passed
+(dev) $ # Let's edit `src/hello.sh` with sed and allow for argument to be passed
 (dev) $ sed -i -e 's|, world|, ${1:-world}|' src/hello.sh 
 (dev) $ bash src/hello.sh Nix
 Hello, Nix! 
