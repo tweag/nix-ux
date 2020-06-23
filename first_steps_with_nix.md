@@ -62,7 +62,7 @@ $ tree .
          };
      in rec { defaultPackage = packages.hello;
               defaultCommand = "./bin/hello.sh";
-              packages.hello = forAllSystems project
+              packages.hello = forAllSystems project;
             };
  }
  ```
