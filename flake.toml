@@ -1,0 +1,69 @@
+# => merged with .nix/config.toml (uncommitted) and ~/.config/nix/config.toml
+
+maintainers = [ "Eelco Dolstra <edolstra@gmail.com>" ]
+description = "A package to say hello"
+
+[config]
+binary-caches = [ "https://my-cache.example.org" ]
+
+# nix config --set binary-caches https://...
+
+[inputs]
+nixpkgs = "20.03"
+dwarffs = "master"
+
+[package.hello]
+
+platforms = [ "x86_64-linux" "aarch64-macos" ]
+#platforms = "${nixpkgs.cowsay.platforms}"
+
+# Not necessary here.
+dependencies = [ "nixpkgs#cowsay" "dwarffs" ]
+
+build-phase = """
+  echo "Building hello.sh ..."
+  cat > hello <<EOF
+  #! ${nixpkgs~bash}/bin/sh
+  exec ${nixpkgs~cowsay}/bin/cowsay Hello ${option.who}
+  EOF
+  chmod +x hello
+"""
+
+install-phase = """
+  mkdir -p $out/bin
+  cp ./hello $out/bin/hello
+"""
+
+
+[[option.who]]
+description = "Who we're saying hello to."
+type = "string"
+default = "World"
+
+# $ nix query-options
+# who: ...
+# $ nix build --option who Utrecht
+
+
+[checks.hello-test]
+
+dependencies = "#hello"
+
+test-command = """
+  hello | grep ...
+"""
+
+[pythonPackage.morty]
+dependencies = [ ... ]
+
+# for wrapper script generation: => PATH=${firefox}/bin:$PATH
+runtime-dependencies = [ "nixpkgs~firefox" ]
+
+# nix show-module pythonPackage => shows all config options in the pythonPackage module
+
+[rustPackage.rick]
+# usually nothing here, it just reads Cargo.toml and Cargo.lock
+
+dependencies = [ "nixpkgs~openssl" ]
+
+src = "./rust-stuff"
