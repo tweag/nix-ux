@@ -1,0 +1,42 @@
+#v3:
+#  - include "metadata" of flake.nix
+#  - we can define multiple packages but this is excluding v2. either package 
+#    one package is defined or a list of packages.
+#  - first package in the list is the default package, provides defaultPackage
+
+
+maintainers = [ "Eelco Dolstra <edolstra@gmail.com>" ]
+description = "A description of a flake"
+
+[config]
+binary-caches = [ "https://my-cache.example.org" ]
+
+[inputs]
+nixpkgs = "20.03"
+dwarffs = "master"
+
+[[package]]
+version = "1.2.0"
+src = "./."
+platforms = [ "x86_64-linux" "aarch64-macos" ]
+dependencies = [
+  "nixpkgs#cowsay",
+  "nixpkgs#bash",
+  "dwarffs",
+]
+buildPhase = """
+  echo "Building hello.sh ..."
+  cat > hello <<EOF
+  #!$(realpath bash)
+  exec $(realpath cowsay) Hello \$1
+  EOF
+  chmod +x hello
+"""
+installPhase = """
+  mkdir -p $out/bin
+  cp ./hello $out/bin/hello
+"""
+
+[[package]]
+name = "another-package"
+
