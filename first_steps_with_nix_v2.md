@@ -8,23 +8,21 @@ To start a new project with Nix, use  `nix new`:
 $ nix new --template=templates#hello-world hello/
 ```
 
-or 
+or `nix init`
 
 ```console
 $ mkdir hello/
 $ nix init --template=templates#hello-world 
 ```
 
-Nix defaults to `only-flake` template. To use a different template we passed 
-`--template=hello-world`. To list all available templates use 
-`nix list-templates` .
+Nix defaults to `minimal` template. To use a different template we passed 
+`--template=hello-world`.
 
 Let's check out what Nix has generated for us:
 
 ```console
 $ cd hello
 $ tree .
-├── flake.nix 
 ├── flake.toml
 └── src/ 
  └── hello.sh 
@@ -39,43 +37,27 @@ description = "A description of a flake"
 
 [inputs]
 nixpkgs = "nixos-unstable"
+
+[package]  # or [[package]]
+name = "hello"
+version = "0.1.0"
+src = "./."
+platforms = [ "x86_64-linux" ]
+dependencies = [
+  "nixpkgs#bash",
+]
+buildPhase = """
+  echo "Building hello.sh ..."
+"""
+installPhase = """
+  mkdir -p $out/bin
+  echo -e "#!$(realpath bash)\n$(cat ./src/hello.sh)" > $out/bin/hello
+  chmod +x $out/bin/hello
+"""
 ```
 
 This is called a **manifest**, and it contains all of the metadata that Nix 
 needs to build your project.
-
-Outputs are defined in `flake.nix`:
-
-```nix
-{ self, nixpkgs }:
-let
-  inherit (nixpkgs.lib) genAttrs;
-  systems =
-    [ "x86_64-linux"
-      "i686-linux"
-      "x86_64-darwin"
-      "aarch64-linux"
-    ];
-  forAllSystems = f: genAttrs systems (system: f (import nixpkgs { inherit system; }));
-  project = pkgs: pkgs.stdenv.mkDerivation
-    { name = "hello-0.1.0";
-      src = self;
-      buildInputs = [ ];
-      buildPhase = ''
-        echo "Building hello.sh ..."
-      '';
-      installPhase = ''
-        mkdir -p $out/bin
-        cp ./src/hello.sh $out/bin
-        chmod +x $out/bin/hello.sh
-      '';
-    };
-in rec 
-  { defaultPackage = packages.hello;
-    defaultCommand = "./bin/hello.sh";
-    packages.hello = forAllSystems project;
-  }
-```
 
 Here's what is in `src/hello.sh`:
 
@@ -106,6 +88,13 @@ $ nix run
 Hello, world!
 ```
 
+To add a additional dependencies to our package use `nix add` command:
+
+```console
+$ nix add nixpkgs#cowsay
+nixpkgs#cowsay added to hello package in ./flake.toml
+```
+
 To enter development environment of you project use `nix develop` command:
 
 ```console
@@ -113,15 +102,22 @@ $ nix develop
    Developing hello-0.1.0 (file:///path/to/package/hello)
 (dev) $ bash src/hello.sh
 Hello, world!
-(dev) $ # Let's edit `src/hello.sh` with sed and allow for argument to be passed
-(dev) $ sed -i -e 's|, world|, ${1:-world}|' src/hello.sh 
-(dev) $ bash src/hello.sh Nix
-Hello, Nix! 
+(dev) $ sed -i -e "s|echo|cowsay|" src/hello.sh 
+(dev) $ bash src/hello.sh
+ _______________ 
+< Hello, world! >
+ --------------- 
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+
 ```
 
-Sometimes you want to just run a certain build phase inside a development 
-environment that gives you an opportunity to inspect and retry. You know, the 
-usual development cycle.
+Sometimes you want to just run a certain phase inside a development environment
+that gives you an opportunity to inspect and retry. You know, the usual
+development cycle.
 
 ```console
 $ nix develop --run-phase=check 
