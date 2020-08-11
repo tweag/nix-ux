@@ -1,0 +1,17 @@
+# flake metadata
+maintainers = [ "Name Surname <name.surname@example.com>" ]
+description = "A program that prints a friendly greeting"
+
+[package] # this module extends the 'package' module
+extends = ["stdenv"] # it furthermore extends the 'stdenv' module
+pname = "hello" # set an option declared by the 'package' module
+version = "1.12" # idem
+environment.WHO = "World" # set an option declared by the 'derivation' module
+buildCommand = """ # idem
+  mkdir -p $out/bin
+  cat > $out/bin/hello <<EOF
+  #! /bin/sh
+  echo Hello $WHO
+  EOF
+  chmod +x $out/bin/hello
+"""
