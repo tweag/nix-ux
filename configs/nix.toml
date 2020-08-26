@@ -2,8 +2,8 @@
 maintainers = [ "Name Surname <name.surname@example.com>" ]
 description = "A program that prints a friendly greeting"
 
-[package] # this module extends the 'package' module
-extends = ["stdenv"] # it furthermore extends the 'stdenv' module
+[hello] # name of the module
+extends = ["package", "stdenv"] # modules that it extends
 pname = "hello" # set an option declared by the 'package' module
 version = "1.12" # idem
 environment.WHO = "World" # set an option declared by the 'derivation' module
@@ -15,3 +15,7 @@ buildCommand = """ # idem
   EOF
   chmod +x $out/bin/hello
 """
+
+[my-hello]
+extends = ["hello", "bundle"]
+environment.WHO = "Utrecht"
