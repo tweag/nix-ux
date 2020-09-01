@@ -2,11 +2,11 @@
   "nodes": {
     "nixpkgs": {
       "locked": {
-        "lastModified": 1597128359,
-        "narHash": "sha256-M7W6hThJ7+T5mKo3QaZjZI6e14yB8xL3roc53liHwhc=",
+        "lastModified": 1598962687,
+        "narHash": "sha256-ZKKF+Qzdpg6DdUqY7VKmfsE7FJUIeBTXAPI19dcBWOk=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "93e5e9e22d7f7e3d54ab2f6e8da0f1c811e32643",
+        "rev": "50f068654a3277f15095937b7b51d3e2a2968b41",
         "type": "github"
       },
       "original": {
@@ -14,9 +14,23 @@
         "type": "indirect"
       }
     },
-    "root": {
+    "nixpkgs-ng": {
       "inputs": {
         "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "narHash": "sha256-k4DX16bZV4p/W11h3YixRW+GCgAzPa9YkczAORjd4Oo=",
+        "path": "/home/eelco/Dev/nix-ux/nixpkgs-ng",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/eelco/Dev/nix-ux/nixpkgs-ng",
+        "type": "path"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixpkgs-ng": "nixpkgs-ng"
       }
     }
   },
