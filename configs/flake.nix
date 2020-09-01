@@ -1,5 +1,5 @@
 {
-  inputs.nixpkgs-ng = { url = path:///home/eelco/Dev/nix-ux/nixpkgs-ng; };
+  inputs.nixpkgs-ng = { url = github:tweag/nix-ux/configs?dir=nixpkgs-ng; };
 
   outputs = { self, nixpkgs-ng }: {
 

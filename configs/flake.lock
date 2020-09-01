@@ -19,13 +19,20 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "narHash": "sha256-k4DX16bZV4p/W11h3YixRW+GCgAzPa9YkczAORjd4Oo=",
-        "path": "/home/eelco/Dev/nix-ux/nixpkgs-ng",
-        "type": "path"
+        "dir": "nixpkgs-ng",
+        "lastModified": 1598965090,
+        "narHash": "sha256-kOLrp8g57b7CApo7aun3z4YAYt+n+iOIIdqsHCFwH1w=",
+        "owner": "tweag",
+        "repo": "nix-ux",
+        "rev": "a5aa61f7379f2d4338374c0c007a73049393cd01",
+        "type": "github"
       },
       "original": {
-        "path": "/home/eelco/Dev/nix-ux/nixpkgs-ng",
-        "type": "path"
+        "dir": "nixpkgs-ng",
+        "owner": "tweag",
+        "ref": "configs",
+        "repo": "nix-ux",
+        "type": "github"
       }
     },
     "root": {
