@@ -6,7 +6,7 @@
     modules = {
 
       hello = module {
-        description = "A program that prints a friendly greeting.";
+        doc = "A program that prints a friendly greeting.";
 
         extends = [ nixpkgs-ng.modules.package nixpkgs-ng.modules.stdenv ];
 
@@ -15,7 +15,7 @@
           who = {
             default = "World";
             example = "Utrecht";
-            description = "Who to greet.";
+            doc = "Who to greet.";
           };
 
         };

@@ -4,33 +4,34 @@
     modules = {
 
       derivation = module {
-        description = "A Nix derivation.";
+        doc = "A Nix derivation.";
 
         options = {
 
           name = {
             example = "hello-1.2.3";
-            description = "The name component of the store paths produced by this derivation.";
+            doc = "The name component of the store paths produced by this derivation.";
           };
 
           system = {
             default = "x86_64-linux";
             example = "x86_64-darwin";
-            description = "The platform type on which to build this derivation.";
+            doc = "The platform type on which to build this derivation.";
           };
 
           derivation = {
-            description = "The resulting derivation.";
+            doc = "The resulting derivation.";
           };
 
           environment = {
             default = {};
+            doc = "Environment variables passed to the builder.";
           };
 
           # TODO: outputs, builder, args, ...
 
           buildCommand = {
-            description = "The contents of the shell script that builds the derivation.";
+            doc = "The contents of the shell script that builds the derivation.";
           };
 
         };
@@ -50,6 +51,12 @@
       };
 
       stdenv = module {
+        doc =
+          ''
+            This module provides a standard environment for building
+            packages.
+          '';
+
         extends = [ self.modules.derivation ];
 
         config = { config }: {
@@ -58,7 +65,7 @@
       };
 
       package = module {
-        description = "An installable package.";
+        doc = "An installable package.";
 
         extends = [ self.modules.derivation ];
 
@@ -66,13 +73,13 @@
 
           pname = {
             example = "hello";
-            description = "Name of the package.";
+            doc = "Name of the package.";
           };
 
           version = {
             default = null;
             example = "1.2.3";
-            description = "The version of the package. Must be null or start with a digit.";
+            doc = "The version of the package. Must be null or start with a digit.";
           };
 
         };
@@ -90,7 +97,7 @@
         options = {
 
           bundle = {
-            description = "A derivation that produces a tarball containing the closure of a package.";
+            doc = "A derivation that produces a tarball containing the closure of a package.";
           };
 
         };
