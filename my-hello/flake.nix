@@ -1,5 +1,5 @@
 {
-  inputs.hello = { url = github:tweag/nix-ux?dir=hello; };
+  inputs.hello.url = github:tweag/nix-ux?dir=hello;
 
   outputs = { self, hello }: {
 
