@@ -1,0 +1,65 @@
+{
+  "nodes": {
+    "hello": {
+      "inputs": {
+        "nixpkgs-ng": "nixpkgs-ng"
+      },
+      "locked": {
+        "dir": "hello",
+        "lastModified": 1602794404,
+        "narHash": "sha256-LhG1NNX037g1nCmSkUKjBmSLjWtvxoQZVtkVCWWgKRQ=",
+        "owner": "tweag",
+        "repo": "nix-ux",
+        "rev": "45dad35f0f7d1ecbe75ae63b9761e430cae77c13",
+        "type": "github"
+      },
+      "original": {
+        "dir": "hello",
+        "owner": "tweag",
+        "repo": "nix-ux",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1599137069,
+        "narHash": "sha256-Mdauu2GJZ95DEI8R9CYRPcndSHTINjRET7diOtTbryU=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "f806b3c81b99ea402cad8d641323e61215a855b3",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs-ng": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "dir": "nixpkgs-ng",
+        "lastModified": 1600865835,
+        "narHash": "sha256-atOnS59bKbsFnQXJdv5XHGQzZBp/BFR/7lFzm5NEPFc=",
+        "owner": "tweag",
+        "repo": "nix-ux",
+        "rev": "cbd9b06745b672cf103979477fa496128926cca2",
+        "type": "github"
+      },
+      "original": {
+        "dir": "nixpkgs-ng",
+        "owner": "tweag",
+        "repo": "nix-ux",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "hello": "hello"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
