@@ -2,11 +2,11 @@ description = "My own Hello World"
 maintainers = [ "Eelco Dolstra <edolstra@gmail.com>" ]
 
 [inputs]
-configs.url = "github:tweag/nix-ux/configs?dir=configs"
+hello.url = "github:tweag/nix-ux?dir=hello"
 
 [my-hello]
-extends = [ "configs#hello" ]
+extends = [ "hello#hello" ]
 doc = '''
   A specialized version of the Hello package!
 '''
-who = "Springfield"
+who = "NixCon"
