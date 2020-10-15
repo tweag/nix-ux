@@ -20,11 +20,11 @@
       },
       "locked": {
         "dir": "nixpkgs-ng",
-        "lastModified": 1600865835,
-        "narHash": "sha256-atOnS59bKbsFnQXJdv5XHGQzZBp/BFR/7lFzm5NEPFc=",
+        "lastModified": 1602794404,
+        "narHash": "sha256-LhG1NNX037g1nCmSkUKjBmSLjWtvxoQZVtkVCWWgKRQ=",
         "owner": "tweag",
         "repo": "nix-ux",
-        "rev": "cbd9b06745b672cf103979477fa496128926cca2",
+        "rev": "45dad35f0f7d1ecbe75ae63b9761e430cae77c13",
         "type": "github"
       },
       "original": {
